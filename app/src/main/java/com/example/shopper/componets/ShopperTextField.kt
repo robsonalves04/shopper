@@ -55,8 +55,8 @@ fun ShopperTextField(
                     },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = tipoText!!,
-                        imeAction = ImeAction.Go,
-                        autoCorrect = true
+                        imeAction = ImeAction.Next,
+                        autoCorrectEnabled = true
                     ),
                     textStyle = TextStyle(
                         textAlign = textAlign,
