@@ -35,7 +35,7 @@ fun ShopperTextField(
     onValueChange: ((String) -> Unit) ?= { x -> refValue.value = x }
 ) {
 
-    Column(Modifier.padding(16.dp)) {
+    Column(Modifier.padding(top = 6.dp, bottom = 6.dp, start = 16.dp, end = 16.dp)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth(widthFloat)
@@ -56,7 +56,6 @@ fun ShopperTextField(
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = tipoText!!,
                         imeAction = ImeAction.Next,
-                        autoCorrectEnabled = true
                     ),
                     textStyle = TextStyle(
                         textAlign = textAlign,

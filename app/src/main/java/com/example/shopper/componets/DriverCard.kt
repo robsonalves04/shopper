@@ -27,18 +27,18 @@ import com.example.shopper.viewmodel.RideViewModel
 
 @Composable
 fun DriverCard(
-    model: RideEstimateModel,
-    onClick: ((model: RideEstimateModel) -> Unit)? = null,
-//    nameDriver: String,
-//    vehicle: String,
-//    valuePrice: String,
-//    onClick: @Composable (() -> Unit)? = null,
+    nameDriver: String,
+    vehicle: String,
+    valuePrice: String,
+//    model: RideEstimateModel,
+//    onClick: ((model: RideEstimateModel) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick?.invoke(model) }
+            .clickable { onClick?.invoke() }
             .shadow(8.dp, shape = RoundedCornerShape(12.dp))
             .background(Color.White, shape = RoundedCornerShape(12.dp))
     ) {
@@ -46,20 +46,20 @@ fun DriverCard(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "${model.driver}",
+                text = "${nameDriver}",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = "${model.driver}",
+                text = "${vehicle}",
                 fontSize = 16.sp,
                 color = Color.Gray,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
-                text = "R$ ${model.value}",
+                text = "R$ ${valuePrice}",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color(0xFF4CAF50), // Verde para o preço

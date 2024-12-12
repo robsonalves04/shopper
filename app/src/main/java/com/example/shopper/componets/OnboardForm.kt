@@ -28,15 +28,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shopper.R
+import com.example.shopper.viewmodel.RideViewModel
 
 import com.example.shopper.viewmodel.ShopperViewModel
 
 
 @Composable
-fun OnboardForm(dadosViewModel: ShopperViewModel,  navigateToNextScreen: () -> Unit) {
+fun OnboardForm(dadosViewModel: ShopperViewModel,viewModel: RideViewModel,  navigateToNextScreen: () -> Unit) {
 
-    val digiteID = remember { mutableStateOf("") }
-    val digitesenha = remember { mutableStateOf("") }
+    val digiteID = remember { mutableStateOf("CT01") }
+    val digitesenha = remember { mutableStateOf("1") }
     val paginaVazia = remember { mutableStateOf(0) }
     val context = LocalContext.current
     //==Tela Inicial
@@ -96,6 +97,7 @@ fun OnboardForm(dadosViewModel: ShopperViewModel,  navigateToNextScreen: () -> U
             //== Botão de acesso ao aplicativo
             Button(
                 onClick = {
+//                    viewModel.historicRides(context,digiteID.value, digitesenha.value)
 
                     dadosViewModel.setUserData(digiteID.value, digitesenha.value)
                     navigateToNextScreen()

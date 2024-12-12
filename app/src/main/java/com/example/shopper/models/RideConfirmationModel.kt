@@ -4,14 +4,21 @@ data class RideConfirmationModel(
     val customer_id: String,
     val origin: String,
     val destination: String,
-    val distance: Double,
+    val distance: Number,
     val duration: String,
-    val driver: DriverDetails,
-    val value: Double
+    val driver:  DriverDetails,
+    val value: Number
 )
 
 data class DriverDetails(
-    val id: Int,
+    val id: Number,
     val name: String
 )
+
+data class RideFinishModel(
+    val success: Boolean,
+    val message: String,
+)
+
+
 

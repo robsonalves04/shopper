@@ -30,14 +30,15 @@ fun AppNavigation(navController: NavHostController, shopperViewModel: ShopperVie
 
     NavHost(navController = navController, startDestination = "onboard") {
         composable("onboard") {
+            val rideViewModel: RideViewModel = getViewModel()
             OnboardForm(
-                dadosViewModel = shopperViewModel,
+                dadosViewModel = shopperViewModel,rideViewModel,
                 navigateToNextScreen = { navController.navigate("rideScreen") }
             )
         }
         composable("rideScreen") {
             val rideViewModel: RideViewModel = getViewModel()
-            RideForm(viewModel = rideViewModel,navigateToNextScreen = { navController.navigate("driverDatails")})
+            RideForm(dadosViewModel = shopperViewModel,viewModel = rideViewModel,navigateToNextScreen = { navController.navigate("rideScreen")})
         }
         composable("driverDatails") {
             val rideViewModel: RideViewModel = getViewModel()
@@ -46,30 +47,6 @@ fun AppNavigation(navController: NavHostController, shopperViewModel: ShopperVie
         }
         composable("search") {
             SearchForm(dadosViewModel = shopperViewModel)
-        }
-
-        composable(
-            route = "driverDetails/{name}/{vehicle}/{price}/{distance}/{driverId}",
-            arguments = listOf(
-                navArgument("name") { type = NavType.StringType },
-                navArgument("vehicle") { type = NavType.StringType },
-                navArgument("price") { type = NavType.StringType },
-                navArgument("distance") { type = NavType.IntType },
-                navArgument("driverId") { type = NavType.IntType }
-            )
-        ) { backStackEntry ->
-            val name = backStackEntry.arguments?.getString("name") ?: "N/A"
-            val vehicle = backStackEntry.arguments?.getString("vehicle") ?: "N/A"
-            val price = backStackEntry.arguments?.getString("price") ?: "N/A"
-            val distance = backStackEntry.arguments?.getInt("distance") ?: 0
-            val driverId = backStackEntry.arguments?.getInt("driverId") ?: 0
-
-//            DriverDetailsCard(
-//                rideDetails = RideEstimateModel(),
-//                driver = Driver(),
-//                onBack = {}
-//
-//            )
         }
     }
 }

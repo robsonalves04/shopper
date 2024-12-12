@@ -1,10 +1,7 @@
 package com.example.shopper.componets
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,11 +13,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,32 +26,31 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.map
+import com.example.shopper.models.DriverDetails
+
 import com.example.shopper.models.RideEstimateModel
+import com.example.shopper.screen.ConfirmationScreen
 import com.example.shopper.viewmodel.RideViewModel
+import com.example.shopper.viewmodel.ShopperViewModel
 
 
 @Composable
-fun RideForm(viewModel: RideViewModel, navigateToNextScreen: () -> Unit) {
+fun RideForm(dadosViewModel: ShopperViewModel, viewModel: RideViewModel, navigateToNextScreen: () -> Unit) {
     val origin =
-        remember { mutableStateOf("Av. Pres. Kenedy, 2385 - Remédios, Osasco - SP, 02675-031") }
+        remember { mutableStateOf("Av. Thomas Edison, 365 - Barra Funda, São Paulo - SP, 01140-000") }
     val destination =
         remember { mutableStateOf("Av. Paulista, 1538 - Bela Vista, São Paulo - SP, 01310-200") }
-    val customer_id = remember { mutableStateOf("2") }
-    val driverId = 0
+    val customer_id = remember { mutableStateOf("") }
+    val distance = remember { mutableStateOf("") }
+    val custumerId = remember { mutableStateOf("") }
+
     val context = LocalContext.current
     val state = rememberScrollState()
-
-    // --== Armazenando itens locais do motorista
-    val _motorista = remember {
-        mutableStateOf<List<RideEstimateModel>>(listOf())
-    }
-
     val rideData = viewModel.rideEstimate.value
-    val rideDetail = viewModel.motorista_api.observeAsState()
-//    val rideData = viewModel._rideData.observeAsState()
 
+    var confirmationResponse by remember { mutableStateOf<String?>(null) }
 
+dadosViewModel.setUserData(id = "", "")
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,51 +60,13 @@ fun RideForm(viewModel: RideViewModel, navigateToNextScreen: () -> Unit) {
             Modifier
                 .fillMaxWidth()
         ) {
-            rideData.map { it1 ->
-                it1?.options?.map { it2 ->
-                    DriverCard(
-                        model = it1,
-
-//                        it2.name!!, it2.vehicle!!, it2.value.toString(),
-                        onClick = {
-                            navigateToNextScreen.invoke()
-//                            DriverDetailsCard(
-//                                model = it1,
-//                                onClick = { model ->
-//
-//
-//                                }
-//                            )
-
-                        },
-                    )
-                }
-            }
-        }
-
-        rideData.map { it ->
-            it?.origin
-            StaticMapScreen(
-                latitudeA = it?.origin?.latitude!!,
-                longitudeA = it?.origin?.longitude!!,
-                latitudeB = it?.destination?.latitude!!,
-                longitudeB = it?.destination?.longitude!!,
-                apiKey = "AIzaSyB4JS11hEPloT_QEOJSIoiUjq6Fxc5iyFo"
-            )
-        }
-
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .height(300.dp)
-        ) {
             ShopperTextField(
                 widthFloat = 1f,
                 textAlign = TextAlign.Left,
                 maxLength = 150,
                 refValue = customer_id,
                 onValueChange = {
-                    customer_id.value
+                    dadosViewModel.userId//
                 },
                 placeholder = "Digite a ID do motorista",
                 tipoText = KeyboardType.Text
@@ -137,6 +95,60 @@ fun RideForm(viewModel: RideViewModel, navigateToNextScreen: () -> Unit) {
                 tipoText = KeyboardType.Text
             )
         }
+        rideData.map { it ->
+            it?.origin
+            StaticMapScreen(
+                latitudeA = it?.origin?.latitude!!,
+                longitudeA = it?.origin?.longitude!!,
+                latitudeB = it?.destination?.latitude!!,
+                longitudeB = it?.destination?.longitude!!,
+                apiKey = "AIzaSyB4JS11hEPloT_QEOJSIoiUjq6Fxc5iyFo"
+            )
+        }
+        Column(
+            Modifier
+                .fillMaxWidth()
+        ) {
+            rideData.map { it1 ->
+                it1?.options?.map { it2 ->
+                    DriverCard(
+                        it2.name!!, it2.vehicle!!, it2.value.toString(),
+                        onClick = {
+                            it1.distance?.let {
+                                it1.duration?.let { it3 ->
+                                    it2.id?.let { it4 -> DriverDetails(id = it4, name = it2.name) }
+                                        ?.let { it5 ->
+                                            it2.value?.let { it4 ->
+                                                viewModel.confirmRide(
+                                                    context,
+                                                    customerId = "1",
+                                                    origin = (it1.origin?.latitude?.plus(it1.origin.longitude!!)).toString(),
+                                                    destination = (it1.destination?.latitude?.plus(
+                                                        it1.destination.longitude!!
+                                                    )).toString(),
+                                                    distance = it,
+                                                    duration = it3,
+                                                    driver = it5,
+                                                    value = it4,
+                                                    onSuccess = { response ->
+
+                                                        confirmationResponse = "Success: $response"
+                                                        println("Success: $response")
+                                                    },
+//                                                    onError = { error ->
+//                                                        confirmationResponse = "Error: $error"
+//                                                        println("Error: $error")
+//                                                    }
+                                                )
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+        }
 
         Column(
             Modifier
@@ -146,6 +158,7 @@ fun RideForm(viewModel: RideViewModel, navigateToNextScreen: () -> Unit) {
             Button(
                 onClick = {
                     viewModel.fetchRideEstimate(
+                        context,
                         customerId = customer_id.value,
                         origin = origin.value,
                         destination = destination.value
@@ -160,6 +173,17 @@ fun RideForm(viewModel: RideViewModel, navigateToNextScreen: () -> Unit) {
                     .height(60.dp)
             ) {
                 Text(text = "Buscar Rota", fontSize = 22.sp, color = Color(0xFF09202D))
+            }
+        }
+    }
+    rideData.map {
+        it?.options?.map { it1 ->
+            it1.name?.let { it2 ->
+                ConfirmationScreen(
+                    name = it2,
+                    onConfirm = { navigateToNextScreen() }, // Reseta a resposta
+                    confirmationResponse = confirmationResponse
+                )
             }
         }
     }
