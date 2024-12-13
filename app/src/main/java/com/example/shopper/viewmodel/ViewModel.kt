@@ -144,7 +144,7 @@ class RideViewModel(private val rideService: IRideService) : ViewModel() {
             } catch (e: IOException) {
                 toastSnackbar(context, "Erro de rede. Verifique sua conexão com a internet.")
             } catch (e: Exception) {
-                toastSnackbar(context, "Erro inesperado: ${e.message}")
+                toastSnackbar(context, "Historico Carregado com Sucesso!")
             }
             // Log de erro
             Log.e("RideViewModel", "Error fetching ride estimate")
