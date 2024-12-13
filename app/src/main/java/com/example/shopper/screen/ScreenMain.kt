@@ -10,16 +10,12 @@ import com.example.shopper.viewmodel.ShopperViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ScreenMain : AppCompatActivity()  {
-    private val shopperViewModel: ShopperViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            //== Formulario de Tela Inicial
-            val navController = rememberNavController()
-
             // Configura a navegação do app
-            AppNavigation(navController = navController, shopperViewModel = shopperViewModel)
+            AppNavigation()
         }
     }
 }

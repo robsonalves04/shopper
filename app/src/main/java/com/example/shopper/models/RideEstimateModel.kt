@@ -1,6 +1,5 @@
 package com.example.shopper.models
 //== Modelo de requisição da API
-
 data class RideRequestModel(
     val customer_id: String,
     val origin: String,

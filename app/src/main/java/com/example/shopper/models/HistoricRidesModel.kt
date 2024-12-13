@@ -1,11 +1,12 @@
 package com.example.shopper.models
 
 import java.sql.Date
+import java.time.LocalDateTime
 
 
 data class HistoricRidesModel(
     val customer_id: String,
-    val rides: RidesDetails,
+    val rides: List<RidesDetails>?,
     val destination: String
 )
 
@@ -25,7 +26,3 @@ data class DriverHistoricRides(
     val name: String,
 )
 
-data class DetailsDriverHistoric(
-    val customer_id: String,
-    val driver_id: String,
-)

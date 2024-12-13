@@ -30,8 +30,6 @@ fun DriverCard(
     nameDriver: String,
     vehicle: String,
     valuePrice: String,
-//    model: RideEstimateModel,
-//    onClick: ((model: RideEstimateModel) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
     Box(
@@ -62,7 +60,7 @@ fun DriverCard(
                 text = "R$ ${valuePrice}",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color(0xFF4CAF50), // Verde para o preço
+                color = Color(0xFF4CAF50),
             )
         }
     }

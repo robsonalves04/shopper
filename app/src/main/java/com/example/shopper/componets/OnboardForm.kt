@@ -1,7 +1,6 @@
 package com.example.shopper.componets
 
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,18 +25,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shopper.R
-import com.example.shopper.viewmodel.RideViewModel
-
 import com.example.shopper.viewmodel.ShopperViewModel
 
 
 @Composable
-fun OnboardForm(dadosViewModel: ShopperViewModel,viewModel: RideViewModel,  navigateToNextScreen: () -> Unit) {
+fun OnboardForm(
+    dadosViewModel: ShopperViewModel,
+    navigateToNextScreen: () -> Unit
+) {
 
-    val digiteID = remember { mutableStateOf("CT01") }
-    val digitesenha = remember { mutableStateOf("1") }
+    val digiteID = remember { mutableStateOf("") }
+    val digitesenha = remember { mutableStateOf("") }
     val paginaVazia = remember { mutableStateOf(0) }
     val context = LocalContext.current
     //==Tela Inicial
@@ -47,61 +46,42 @@ fun OnboardForm(dadosViewModel: ShopperViewModel,viewModel: RideViewModel,  navi
             .background(color = Color(0xFFCACFC5)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        //== Logo da Empresa
-        Box {
-            Image(
-                painter = painterResource(id = R.drawable.travel_request),
-                contentDescription = null,
-                modifier = Modifier
-                    .height(400.dp)
-                    .width(400.dp)
-                    .padding(top = 80.dp)
-            )
+        Column(
+            Modifier
+                .padding(16.dp)
+        ) {
+            //== Logo da Empresa
+            Box {
+                Image(
+                    painter = painterResource(id = R.drawable.travel_request),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(400.dp)
+                        .width(400.dp)
+                        .padding(top = 80.dp)
+                )
+            }
+            Column() {
+                Text(text = "Digite seu ID", fontSize = 14.sp, color = Color(0xFF09202D))
+                ShopperTextField(
+                    widthFloat = 1f,
+                    textAlign = TextAlign.Center,
+                    maxLength = 8,
+                    refValue = digiteID,
+                    onValueChange = {
+                        digiteID.value = it
+                    },
+                    placeholder = "Digite seu ID",
+                    tipoText = KeyboardType.Text
+                )
+            }
         }
-
-        Column() {
-
-            ShopperTextField(
-                widthFloat = 1f,
-                textAlign = TextAlign.Center,
-                maxLength = 8,
-                refValue = digiteID,
-                onValueChange = {
-                    digiteID.value = it
-//                    if (it.isEmpty()) {
-//                        paginaVazia.value = 0
-//                    }
-                },
-                placeholder = "Digite seu ID",
-                tipoText = KeyboardType.Number
-            )
-
-            ShopperTextField(
-                widthFloat = 1f,
-                textAlign = TextAlign.Center,
-                maxLength = 8,
-                refValue = digitesenha,
-                onValueChange = {
-                    digitesenha.value = it
-                    if (it.isEmpty()) {
-                        paginaVazia.value = 0
-                    }
-                },
-                placeholder = "Digite sua senha",
-                tipoText = KeyboardType.Number
-            )
-
-
-        }
-        Box {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             //== Botão de acesso ao aplicativo
             Button(
                 onClick = {
-//                    viewModel.historicRides(context,digiteID.value, digitesenha.value)
-
                     dadosViewModel.setUserData(digiteID.value, digitesenha.value)
                     navigateToNextScreen()
-
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color(0xFF2A7693)
@@ -110,7 +90,6 @@ fun OnboardForm(dadosViewModel: ShopperViewModel,viewModel: RideViewModel,  navi
                     .padding(16.dp)
                     .fillMaxWidth(0.8f)
                     .height(60.dp)
-                    .align(Alignment.Center)
             ) {
                 Text(text = "Entrar", fontSize = 22.sp, color = Color(0xFF09202D))
             }
